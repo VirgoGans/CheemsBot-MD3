@@ -191,24 +191,7 @@ const reply = (teks) => {
 	
 	//reset limit every 12 hours\\
         
-	if (db.data.settings[botNumber].autobio) {
-	    let setting = global.db.data.settings[botNumber]
-	    if (new Date() * 1 - setting.status > 1000) {
-		let uptime = await runtime(process.uptime())
-		await XeonBotInc.setStatus(`${XeonBotInc.user.name} | Runtime : ${runtime(uptime)}`)
-		setting.status = new Date() * 1
-	    }
-	}
-	
-	  //antilink\\
-        
-        //auto reply by xeon 🦄
-       
-      //Mute Chat\\
-      if (db.data.chats[m.chat].mute && !isAdmins && !isCreator) {
-      return
-      }
-        
+
         //media detect by 🦄xeon\\
 		const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
