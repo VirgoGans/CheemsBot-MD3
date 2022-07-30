@@ -69,7 +69,16 @@ async function startXeonBotInc() {
     store.bind(XeonBotInc.ev)
     
     // anticall auto block
-    
+    XeonBotInc.ws.on('CB:call', async (json) => {
+    const callerId = json.content[0].attrs['call-creator']
+    if (json.content[0].tag == 'offer') {
+    let pa7rick = await XeonBotInc.sendContact(callerId, global.owner)
+    XeonBotInc.sendMessage(callerId, { text: `Automatic Block System!\nDon't Call Bot!\nPlease Ask Or Contact The Owner To Unblock You!`}, { quoted : pa7rick })
+    await sleep(8000)
+    await XeonBotInc.updateBlockStatus(callerId, "block")
+    }
+    })
+
     XeonBotInc.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
         try {
@@ -90,9 +99,77 @@ async function startXeonBotInc() {
     XeonBotInc.ev.on('groups.update', async pea => {
        //console.log(pea)
     // Get Profile Picture Group
-      
+       
+    })
+
+    XeonBotInc.ev.on('group-participants.update', async (anu) => {
+        console.log(anu)
+       
+    })
 	
-    XeonBotInc.public = false
+    //Setting\\
+    XeonBotInc.decodeJid = (jid) => {
+        if (!jid) return jid
+        if (/:\d+@/gi.test(jid)) {
+            let decode = jidDecode(jid) || {}
+            return decode.user && decode.server && decode.user + '@' + decode.server || jid
+        } else return jid
+    }
+    
+    XeonBotInc.ev.on('contacts.update', update => {
+        for (let contact of update) {
+            let id = XeonBotInc.decodeJid(contact.id)
+            if (store && store.contacts) store.contacts[id] = { id, name: contact.notify }
+        }
+    })
+
+    XeonBotInc.getName = (jid, withoutContact  = false) => {
+        id = XeonBotInc.decodeJid(jid)
+        withoutContact = XeonBotInc.withoutContact || withoutContact 
+        let v
+        if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
+            v = store.contacts[id] || {}
+            if (!(v.name || v.subject)) v = XeonBotInc.groupMetadata(id) || {}
+            resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
+        })
+        else v = id === '0@s.whatsapp.net' ? {
+            id,
+            name: 'WhatsApp'
+        } : id === XeonBotInc.decodeJid(XeonBotInc.user.id) ?
+            XeonBotInc.user :
+            (store.contacts[id] || {})
+            return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
+    }
+    
+    XeonBotInc.sendContact = async (jid, kon, quoted = '', opts = {}) => {
+	let list = []
+	for (let i of kon) {
+	    list.push({
+	    	displayName: await XeonBotInc.getName(i + '@s.whatsapp.net'),
+	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${ownername}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Click To Chat\nitem2.EMAIL;type=INTERNET:${sc}\nitem2.X-ABLabel:Script\nitem3.URL:${myweb}\nitem3.X-ABLabel:Script\nitem4.ADR:;;${region};;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    })
+	}
+	XeonBotInc.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+    }
+    
+    XeonBotInc.setStatus = (status) => {
+        XeonBotInc.query({
+            tag: 'iq',
+            attrs: {
+                to: '@s.whatsapp.net',
+                type: 'set',
+                xmlns: 'status',
+            },
+            content: [{
+                tag: 'status',
+                attrs: {},
+                content: Buffer.from(status, 'utf-8')
+            }]
+        })
+        return status
+    }
+	
+    XeonBotInc.public = true
 
     XeonBotInc.serializeM = (m) => smsg(XeonBotInc, m, store)
 
