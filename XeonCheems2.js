@@ -225,6 +225,38 @@ case "assalamualaikum": case "assalamu'alaikum": case "assalamu’alaikum warahm
           case "asalamualaikum": case "asalamu'alaikum": case "assalamu’alaikum wr wb": case "assalamualaikum wr wb":
             m.reply("waallaikumsalam wr. wb.")
             break
+ case 'ytsearch': {
+                if (!text) return replay(`Example : ${prefix + command} Anime Story Whatsapp`)
+                let yts = require("yt-search")
+                let search = await yts(text)
+                let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
+                let no = 1
+                for (let i of search.all) {
+                    teks += `🌀 No : ${no++}\n🌀 Type : ${i.type}\n🌀 Video ID : ${i.videoId}\n🌀 Title : ${i.title}\n🌀 Views : ${i.views}\n🌀 Duration : ${i.timestamp}\n🌀 Uploaded On : ${i.ago}\n🌀 Author : undefined\n🌀 Url : ${i.url}\n\n─────────────────\n\n`
+                }
+                XeonBotInc.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
+            }
+            break
+break
+	    case 'dlytmp3': {
+                let { yta } = require('./lib/y2mate')
+                if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`)
+                let quality = args[1] ? args[1] : '128kbps'
+                let media = await yta(text, quality)
+                if (media.filesize >= 999999) return reply('File Over Limit '+util.format(media))
+                XeonBotInc.sendImage(m.chat, media.thumb, `🌀 Title : ${media.title}\n🌀 File Size : ${media.filesizeF}\n🌀 Url : ${isUrl(text)}\n🌀 Ext : MP3\n🌀 Resolution : ${args[1] || '320kbps'}`, m)
+                XeonBotInc.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
+            }
+            break
+            case 'dlytmp4': {
+                let { ytv } = require('./lib/y2mate')
+                if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`)
+                let quality = args[1] ? args[1] : '360p'
+                let media = await ytv(text, quality)
+                if (media.filesize >= 999999) return reply('File Over Limit '+util.format(media))
+                XeonBotInc.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `🌀 Title : ${media.title}\n🌀 File Size : ${media.filesizeF}\n🌀 Url : ${isUrl(text)}\n🌀 Ext : MP3\n🌀 Resolution : ${args[1] || '360p'}` }, { quoted: m })
+            }
+            break
             default:
                 if (budy.startsWith('=>')) {
                     if (!isCreator) return reply(mess.owner)
