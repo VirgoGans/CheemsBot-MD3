@@ -223,7 +223,7 @@ const reply = (teks) => {
 switch(command) {
 case "assalamualaikum": case "assalamu'alaikum": case "assalamu’alaikum warahmatullahi wabarakatuh": case "assalamualaikum warahmatullahi wabarakatuh":              
           case "asalamualaikum": case "asalamu'alaikum": case "assalamu’alaikum wr wb": case "assalamualaikum wr wb":
-            m.reply("waallaikumsalam wr. wb.")
+            XeonBotInc.sendMessage(m.chat, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }}, waallaikumsalam wr. wb.{ quoted: m })
             break
  case 'ytsearch': {
                 if (!text) return replay(`Example : ${prefix + command} Anime Story Whatsapp`)
