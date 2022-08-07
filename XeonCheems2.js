@@ -169,11 +169,11 @@ module.exports = XeonBotInc = async (XeonBotInc, m, chatUpdate, store) => {
 	
 	//group target by xeon\\
 const reply = (teks) => {
-            XeonBotInc.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": ` ${global.botname}`,"body": ` V-Bot slebew`, "previewType": "PHOTO","thumbnailUrl": ``,}}}, { quoted: m})
+            XeonBotInc.sendMessage(m.chat, { text: teks, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },}, { quoted: m})
         }
         
         const replay = (teks) => {
-            XeonBotInc.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": ` ${global.botname}`,"body": ` V-Bot slebew`, "previewType": "PHOTO","thumbnailUrl": ``,}}}, { quoted: m})
+            XeonBotInc.sendMessage(m.chat, { text: teks, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },}, { quoted: m})
         }
 	//bug by virgo\\
 	
@@ -221,11 +221,9 @@ const reply = (teks) => {
 
         if (command) await XeonBotInc.sendPresenceUpdate('recording', m.chat, m.sender)
 switch(command) {
-case "assalamualaikum": case "assalamu'alaikum": case "assalamu’alaikum warahmatullahi wabarakatuh": case "assalamualaikum warahmatullahi wabarakatuh":              
-          case "asalamualaikum": case "asalamu'alaikum": case "assalamu’alaikum wr wb": case "assalamualaikum wr wb":
-          let teks=`waalaikumsalam wr. wb.`
-            XeonBotInc.sendMessage(m.chat, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }}, teks,{ quoted: m })
-            break
+if (budy.startsWith('teshehe')) {
+                    return reply(mess.owner)
+                    }
  case 'ytsearch': {
                 if (!text) return replay(`Example : ${prefix + command} Anime Story Whatsapp`)
                 let yts = require("yt-search")
