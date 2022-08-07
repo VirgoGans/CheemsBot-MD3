@@ -170,11 +170,11 @@ module.exports = XeonBotInc = async (XeonBotInc, m, chatUpdate, store) => {
 	//group target by xeon\\
 const reply = (teks) => {
             XeonBotInc.sendMessage(m.chat, { text: teks, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },}, { quoted: m})
-        }
+        }}
         
         const replay = (teks) => {
             XeonBotInc.sendMessage(m.chat, { text: teks, { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },}, { quoted: m})
-        }
+        }}
 	//bug by virgo\\
 	
         //Public & Self\\
